@@ -1,6 +1,6 @@
-# CAN_Trace
+# Automation Analyse von Restladezeit-Messung
 
-Für Langzeitmessungen am Fahrzeug soll ein Datenlogger, Anzeige der Traces und Grafikanzeige erstellt werden.
+Werte werden aus .MF4 / BLF ausgelesen
 
 
 ## Aktuelle Übersicht der .py - Dateien
@@ -11,6 +11,7 @@ Für Langzeitmessungen am Fahrzeug soll ein Datenlogger, Anzeige der Traces und 
 - GUI_IO.py
 - th_1.py
 - th_2.py
+
 
 [Link](https://www.akka-technologies.com/?lang=de)
 
@@ -23,4 +24,3 @@ Für Langzeitmessungen am Fahrzeug soll ein Datenlogger, Anzeige der Traces und 
 1. eins
 2. zwei
 3. drei
-
