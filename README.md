@@ -23,4 +23,8 @@ Werte werden aus .MF4 / BLF ausgelesen
 
 1. eins
 2. zwei
+<<<<<<< HEAD
 3. drei
+=======
+3. drei
+>>>>>>> a3e2d96ae67f5d075520b308a20d5529eb9f9417
