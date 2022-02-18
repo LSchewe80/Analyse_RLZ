@@ -1,0 +1,186 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  float relTime;
+  
+  //Signalvariable
+  float bmsLadeZustand;
+  float ladeZustand02;
+  float bmsMaxLadeStrom;
+  float bmsMaxLadeleistung;
+  float bmsSpannung;
+  float bmsStrom;
+  
+  
+  //Hilfsvariable
+  int sigCounter = 1;
+}
+
+on start
+{
+  //Signalauslesung
+  bmsLadeZustand = getSignal(E3V_EVCANFD::BMS_22::BMS_Ladezustand);
+  ladeZustand02 = getSignal(E3V_ACANFD::Motor_52::Ladezustand_02);
+  bmsMaxLadeStrom = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladestrom);
+  bmsMaxLadeleistung = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladeleistung);
+  bmsSpannung = getSignal(E3V_EVCANFD::BMS_20::BMS_Spannung);
+  bmsStrom = getSignal(E3V_EVCANFD::BMS_20::BMS_Strom);
+  
+  write("/************************************************/");
+  write("BMS Ladezustand 20%%");
+  write("Relative Messungszeit [s] :  %.3f sec",relTime);
+  write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+  write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+  write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+  write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+  write("BMS_Strom :  %.3f Ampere",bmsStrom);
+  write("/************************************************/");
+}
+
+on message E3V_EVCANFD::BMS_22
+{ 
+  //Relative Messungszeit [s]
+  relTime = timeNowInt64()/1000000000.0;
+  
+  //Signalauslesung
+  bmsLadeZustand = getSignal(E3V_EVCANFD::BMS_22::BMS_Ladezustand);
+  ladeZustand02 = getSignal(E3V_ACANFD::Motor_52::Ladezustand_02);
+  bmsMaxLadeStrom = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladestrom);
+  bmsMaxLadeleistung = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladeleistung);
+  bmsSpannung = getSignal(E3V_EVCANFD::BMS_20::BMS_Spannung);
+  bmsStrom = getSignal(E3V_EVCANFD::BMS_20::BMS_Strom);
+  
+  
+  //Auswertung bei BMS_Ladezustand == 20%
+  if(bmsLadeZustand >= 20 && bmsLadeZustand <= 21 && sigCounter == 1)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 20%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 30%
+  if(bmsLadeZustand >= 30 && bmsLadeZustand <= 31 && sigCounter == 2)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 30%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 40%
+  if(bmsLadeZustand >= 40 && bmsLadeZustand <= 41 && sigCounter == 3)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 40%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 50%
+  if(bmsLadeZustand >= 50 && bmsLadeZustand <= 51 && sigCounter == 4)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 50%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 60%
+  if(bmsLadeZustand >= 60 && bmsLadeZustand <= 61 && sigCounter == 5)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 60%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+    //Auswertung bei BMS_Ladezustand == 70%
+  if(bmsLadeZustand >= 70 && bmsLadeZustand <= 71 && sigCounter == 6)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 70%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+      //Auswertung bei BMS_Ladezustand == 80%
+  if(bmsLadeZustand >= 80 && bmsLadeZustand <= 81 && sigCounter == 7)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 80%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+        //Auswertung bei BMS_Ladezustand == 90%
+  if(bmsLadeZustand >= 90 && bmsLadeZustand <= 91 && sigCounter == 8)
+  {
+    write("/************************************************/");
+    write("BMS Ladezustand 90%%");
+    write("Relative Messungszeit [s] :  %.3f sec",relTime);
+    write("Ladezustand_02 :  %.1f Prozent",ladeZustand02);
+    write("BMS_MaxLadestrom :  %.1f Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :  %.1f Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung :  %.3f Volt",bmsSpannung);
+    write("BMS_Strom :  %.3f Ampere",bmsStrom);
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  
+  output(this);
+}
+
+on message *
+{
+  output(this);
+}
