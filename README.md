@@ -8,9 +8,7 @@ Werte werden aus .MF4 / BLF ausgelesen
 - __init__.py
 - main.py
 - sRam.py
-- GUI_IO.py
 - th_1.py
-- th_2.py
 
 
 [Link](https://www.akka-technologies.com/?lang=de)
