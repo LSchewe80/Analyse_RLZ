@@ -44,3 +44,12 @@ class RamSec():
         self.start.append(start_content)
         self.stop.append(stop_content)
         self.beenden.append(beenden_content)
+###############################################################################
+class Zwischenspeicher():
+    data_csv = [0]
+
+    def funcClear(self):
+        self.data_csv.clear()
+
+    def funcSpeicher(self, data_csv_content):
+        self.data_csv.append(data_csv_content)

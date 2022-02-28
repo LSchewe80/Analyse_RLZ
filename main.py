@@ -14,7 +14,7 @@ Zusätzlich implentiert und deklariert es alle Semaphoren
 import threading
 import os
 import subprocess
-#import time
+import time
 
 
 ##Einbindung der Modules
@@ -41,11 +41,21 @@ if __name__ == "__main__":
 
     #--------------------------------------------------------------------------
     ##Thread erzeugen
-    string0 = "Thread_1 Analyse_RLZ"
-    f1 = threading.Thread(target = th_1.func_th_1_thread, args=(list,q,string0))
+    string0 = "Thread_1 Analysedaten_xlsx startet!"
+    f1 = threading.Thread(target = th_1.func_th_1_thread, args=(list,string0))
 
     ##Thread starten
-    #f1.start()
+    f1.start()
+    #--------------------------------------------------------------------------
 
+    schreiben_RamSec = sRam.RamSec()
+    time.sleep(1)
+    semaphor_sRam_Sema.acquire()    ##Dekrementiert -1
+    schreiben_RamSec.funcClear()
+    schreiben_RamSec.funcSec(1,0,0)
+    semaphor_sRam_Sema.release()    ##Inkrementiert +1
+
+
+    time.sleep(3)
     print('Ende Main' + '-' * 60)
 ############################_Main_Ende_#######################################

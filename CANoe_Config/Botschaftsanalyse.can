@@ -1,4 +1,11 @@
 /*@!Encoding:1252*/
+/*
+  Ersteller: Lars Schewe
+  Datum: 28.02.2022
+  
+  aktualisiert: 28.02.2022
+
+*/
 includes
 {
   
@@ -6,12 +13,13 @@ includes
 
 variables
 {
+  //Hilfsvariablen Timer
   float relTime_start;
   float relTime;
   float relTime_1;
   float relTime_2;
   
-  //Signalvariable für MSG BMS_22
+  //Signalvariable für E3V_EVCANFD::BMS_22
   float bmsLadeZustand;
   float bmsMaxLadeStrom;
   float bmsMaxLadeleistung;
@@ -21,7 +29,7 @@ variables
   //Signalvariable für MSG E3V_ACANFD::Motor_52
   float ladeZustand02;
   
-  //Signalvariable für MSG HVLM
+  //Signalvariable für E3V_EVCANFD::HVLM_14
   float ladeSzenario;
   
   
@@ -195,7 +203,7 @@ on message E3V_EVCANFD::BMS_22
     write("BMS Ladezustand =  ; 90 ; %%");
     write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
     write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f , Watt",bmsMaxLadeleistung);
+    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
     write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
     write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
     write("/************************************************/");
