@@ -49,22 +49,26 @@ def func_th_1_thread(list,string):
             #Daten aus der CSV auslesen
             try:
                 with open('937.csv') as csvdatei:
-                    column_data = 0
+                    print("CSV-Datei auslesen!" + '-' * 60)
                     csv_reader_object = csv.reader(csvdatei, delimiter=';')
-                    #print(csv_reader_object)
-                    counter = 0
+                    row_csv = 0
+                    column_csv = 0
                     data_Zwischerspeicher.funcClear()
                     for row in csv_reader_object:
-                        print(row[1])   #Inhalt 2.Spalte
-                        data_Zwischerspeicher.funcSpeicher(row[1])
-                        column_data += 1
+                        #print(len(row))
+                        #print(row)   
+                        if len(row) > 1 and row[1] != "":
+                            data_Zwischerspeicher.funcSpeicher(row[1])  #Zeile Inhalt 2.Spalte
+                            row_csv += 1
                     #beginn == False
                     #break
-                    print(len(row))
-                    print(column_data)
+                    print(" ")
+                    print(len(data_Zwischerspeicher.data_csv))
+                    print(row_csv)
+                    print(" ")
 
             except Exception as speichern:
-                print("Datei aus CSV-Datei auslesen fehlgeschlagen!")
+                print("Datei aus CSV-Datei auslesen fehlgeschlagen!" + '-' * 60)
                 print(speichern)
                 beginn = False
                 break
@@ -74,7 +78,7 @@ def func_th_1_thread(list,string):
         main.semaphor_sRam_Sema.acquire()    ##Dekrementiert -1
         if lesen_RamSec.start[0] == 1:
             main.semaphor_sRam_Sema.release()    ##Inkrementiert +1
-            print("Thread_1 Analysedaten_xlsx verarbeiten, in Tabelle einfuegen und speichern!")
+            print("Thread_1 Analysedaten_xlsx verarbeiten, in Tabelle einfuegen und speichern!" + '-' * 60)
             try:
                 print("Excel-Datei oeffnen" + '-' * 60)
                 file = '20211129_937_Analyse_RLZ_23-Grad_DC-MAX_1.xlsx'
@@ -83,13 +87,76 @@ def func_th_1_thread(list,string):
                 #print(sheet['C4'].value)
 
                 print("Excel-Datei befuellen" + '-' * 60)
-                zeile = 10
-                for i in range(column_data - 1):
-                    sheet.cell(row=zeile, column=15).value = data_Zwischerspeicher.data_csv[i]
-                    print(data_Zwischerspeicher.data_csv[i])
-                    zeile += 1
+                zeile_xlmx = 7
+                spalte_xlmx = 3
+                zeile_csv = 0
+                for i in range(len(data_Zwischerspeicher.data_csv)):
+                    if data_Zwischerspeicher.data_csv[i] == "A" :
+                        pass
+                        #print("A " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "B":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("B " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "C":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("C " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "D":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("D " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "E":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("E " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "F":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("F " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "G":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("G " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "H":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("H " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "I":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("I " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "J":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("J " + '-' * 60)
+                    if data_Zwischerspeicher.data_csv[i] == "K":
+                        spalte_xlmx += 1
+                        zeile_xlmx = 7
+                        zeile_csv = 0
+                        #print("K " + '-' * 60)
+                    
+                    if zeile_csv > 0:
+                        #print(data_Zwischerspeicher.data_csv[i])
+                        data_Zwischerspeicher.data_csv[i]=data_Zwischerspeicher.data_csv[i].replace(".", ",")
+                        #print(data_Zwischerspeicher.data_csv[i])
+                        sheet.cell(row=zeile_xlmx, column=spalte_xlmx).value = data_Zwischerspeicher.data_csv[i]
+                        zeile_xlmx += 1
+                    zeile_csv += 1
+
+
+
             except Exception as befuellen:
-                print("Befuellen der Daten in Excel fehlgeschlagen!")
+                print("Befuellen der Daten in Excel fehlgeschlagen!" + '-' * 60)
                 print(befuellen)
                 beginn = False
                 break
@@ -111,7 +178,7 @@ def func_th_1_thread(list,string):
                 break
 
             except Exception as speichern:
-                print("Speichern der Messung in Excel fehlgeschlagen!")
+                print("Speichern der Messung in Excel fehlgeschlagen!" + '-' * 60)
                 print(speichern)
                 beginn = False
                 break
