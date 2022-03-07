@@ -42,29 +42,29 @@ variables
 on start
 {
   //Relative Messungszeit [s]
-  relTime_start = timeNowInt64()/1000000000.0;
+  //relTime_start = timeNowInt64()/1000000000.0;
   
   msgBeep(5);
   
   //Signalauslesung
-  bmsLadeZustand = getSignal(E3V_EVCANFD::BMS_22::BMS_Ladezustand);
+  /*bmsLadeZustand = getSignal(E3V_EVCANFD::BMS_22::BMS_Ladezustand);
   ladeZustand02 = getSignal(E3V_ACANFD::Motor_52::Ladezustand_02);
   bmsMaxLadeStrom = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladestrom);
   bmsMaxLadeleistung = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladeleistung);
   bmsSpannung = getSignal(E3V_EVCANFD::BMS_20::BMS_Spannung);
   bmsStrom = getSignal(E3V_EVCANFD::BMS_20::BMS_Strom);
-  ladeSzenario = getSignal(E3V_EVCANFD::HVLM_14::HVLM_Ladeszenario);
+  ladeSzenario = getSignal(E3V_EVCANFD::HVLM_14::HVLM_Ladeszenario);  */
   
   
-  write("/************Werte bei Messstart*****************/");
-  write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime_start);
-  write("BMS_Ladezustand :  ; %.1f ; %%",bmsLadeZustand);
-  write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-  write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-  write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-  write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-  write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
-  write("/************************************************/");
+  //write("/************Werte bei Messstart*****************/");
+  //write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime_start);
+  //write("BMS_Ladezustand :  ; %.2f ; %%",bmsLadeZustand);
+  //write("Ladezustand_02 :  ; %.2f ; %%",ladeZustand02);
+  //write("BMS_MaxLadestrom :  ; %.2f ; Ampere ",bmsMaxLadeStrom);
+  //)write("BMS_MaxLadeleistung :  ; %.2f ; Watt",bmsMaxLadeleistung);
+  //write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
+  //write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+  //write("/************************************************/");
 }
 
 on message E3V_EVCANFD::BMS_22
@@ -87,13 +87,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 2 ***********************/");
     write("/************BMS Ladezustand = 20 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 20 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;C; 20 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;20; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -103,13 +104,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 3 ***********************/");
     write("/************BMS Ladezustand = 30 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 30 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;D; 30 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;30; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -119,13 +121,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 4 ***********************/");
     write("/************BMS Ladezustand = 40 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 40 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;E; 40 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;40; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -135,13 +138,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 5 ***********************/");
     write("/************BMS Ladezustand = 50 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 50 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;F; 50 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;50; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -151,13 +155,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 6 ***********************/");
     write("/************BMS Ladezustand = 60 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 60 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;G; 60 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;60; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -167,13 +172,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 7 ***********************/");
     write("/************BMS Ladezustand = 70 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 70 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;H; 70 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand =  ;70; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -183,13 +189,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 8 ***********************/");
     write("/************BMS Ladezustand = 80 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 80 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;I; 80 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;80; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -199,13 +206,14 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 9 ***********************/");
     write("/************BMS Ladezustand = 90 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS Ladezustand =  ; 90 ; %%");
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;J; 90 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS Ladezustand = ;90; %%");
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter++;
   }
@@ -234,13 +242,14 @@ on message E3V_ACANFD::Motor_52
   {
     write("/******************* i = 1 ***********************/");
     write("/************Ladezustand_02  = 10 %%**************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS_Ladezustand :  ; %.1f ; %%",bmsLadeZustand);
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;B; 10 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS_Ladezustand : ;%.2f; %%",bmsLadeZustand);
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter_1++;
   }
@@ -250,14 +259,16 @@ on message E3V_ACANFD::Motor_52
   {
     write("/******************* i = 10 **********************/");
     write("/************BMS Ladezustand = 100 %%*************/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS_Ladezustand :  ; %.1f ; %%",bmsLadeZustand);
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;K; 100 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS_Ladezustand : ;%.2f; %%",bmsLadeZustand);
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom : ;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung : ;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ; %.3f; Ampere",bmsStrom);
     write("/************************************************/");
+    write("Analyse beendet --> Wichtig: Datei unter RLZ.csv speichern!");
     sigCounter_1++;
   }
   
@@ -286,13 +297,14 @@ on message E3V_EVCANFD::HVLM_14
   {
     write("/******************* i = 0 ***********************/");
     write("/******HVLM_Ladeszenario = Sofortlade_aktiv*******/");
-    write("Relative Messungszeit [s] :  ; %.3f ; sec",relTime);
-    write("BMS_Ladezustand :  ; %.1f ; %%",bmsLadeZustand);
-    write("Ladezustand_02 :  ; %.1f ; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :  ; %.1f ; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :  ; %.1f ; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung :  ; %.3f ; Volt",bmsSpannung);
-    write("BMS_Strom :  ; %.3f ; Ampere",bmsStrom);
+    write("Bezeichnung ;A; 0 %%");
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
+    write("BMS_Ladezustand : ;%.2f; %%",bmsLadeZustand);
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
+    write("BMS_MaxLadestrom :;%.2f; Ampere ",bmsMaxLadeStrom);
+    write("BMS_MaxLadeleistung :;%f; Watt",bmsMaxLadeleistung);
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
     write("/************************************************/");
     sigCounter_2++;
   }
