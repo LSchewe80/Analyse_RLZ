@@ -42,13 +42,15 @@ def func_th_1_thread(list,string):
     time.sleep(3)
     ##Endlosschleife (verlassen nur durch Abrechen)
     while beginn == True:
-
+        ######################################################################################
+        ## Daten aus der csv-Datei in die Zwischenspeicher (Klasse -- List)
+        #  
         main.semaphor_sRam_Sema.acquire()    ##Dekrementiert -1
         if lesen_RamSec.start[0] == 1:
             main.semaphor_sRam_Sema.release()    ##Inkrementiert +1
             #Daten aus der CSV auslesen
             try:
-                with open('937.csv') as csvdatei:
+                with open('RLZ.csv') as csvdatei:
                     print("CSV-Datei auslesen!" + '-' * 60)
                     csv_reader_object = csv.reader(csvdatei, delimiter=';')
                     row_csv = 0
@@ -56,7 +58,7 @@ def func_th_1_thread(list,string):
                     data_Zwischerspeicher.funcClear()
                     for row in csv_reader_object:
                         #print(len(row))
-                        #print(row)   
+                        print(row)   ##Inhalt CSV --##Zu Ansicht einkommentieren
                         if len(row) > 1 and row[1] != "":
                             data_Zwischerspeicher.funcSpeicher(row[1])  #Zeile Inhalt 2.Spalte
                             row_csv += 1
@@ -74,14 +76,16 @@ def func_th_1_thread(list,string):
                 break
         main.semaphor_sRam_Sema.release()    ##Inkrementiert +1 
 
-    
+        ######################################################################################
+        ## Daten aus dem Zwischenspeicher (Klasse -- List) in die RLZ-Auswertung (Excel) schreiben
+        #     
         main.semaphor_sRam_Sema.acquire()    ##Dekrementiert -1
         if lesen_RamSec.start[0] == 1:
             main.semaphor_sRam_Sema.release()    ##Inkrementiert +1
             print("Thread_1 Analysedaten_xlsx verarbeiten, in Tabelle einfuegen und speichern!" + '-' * 60)
             try:
                 print("Excel-Datei oeffnen" + '-' * 60)
-                file = '20211129_937_Analyse_RLZ_23-Grad_DC-MAX_1.xlsx'
+                file = 'Rolling_Analyse_RLZ.xlsx'
                 fileXLSX = openpyxl.load_workbook(file)
                 sheet = fileXLSX["Auswertung"]
                 #print(sheet['C4'].value)
@@ -161,9 +165,11 @@ def func_th_1_thread(list,string):
                 beginn = False
                 break
 
+            ######################################################################################
+            ## Auswertung speichern        
             try:
                 ##Excel-Datei speichern
-                fileXLSX.save('Result.xlsx')
+                fileXLSX.save('Result_Analyse_RLZ.xlsx')
                 print("Excel-Datei gespeichert" + '-' * 60)
                 
                 time.sleep(2)
