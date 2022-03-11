@@ -12,7 +12,7 @@ includes
 }
 
 variables
-{
+{ 
   //Hilfsvariablen Timer
   float relTime_start;
   float relTime;
@@ -38,17 +38,9 @@ variables
   
   //interne Signale
   double cms_s_ICpMaxStromA;
-  double ctm_s_iHVBatVektor_0;
-  double ctm_s_iHVBatVektor_1;
-  double ctm_s_iHVBatVektor_2;
-  double ctm_s_iHVBatVektor_3;
-  double ctm_s_iHVBatVektor_4;
-  double ctm_s_iHVBatVektor_5;
-  double ctm_s_iHVBatVektor_6;
-  double ctm_s_iHVBatVektor_7;
-  double ctm_s_iHVBatVektor_8;
-  double ctm_s_iHVBatVektor_9;
-  double ctm_s_iHVBatVektor_10;
+  
+  double ctm_s_iHVBatVektor[11]; // array size should match the size of the system variable
+  double ctm_s_iLadDeltaVektor[11];
   
   double ctm_s_valLadezeit1;
   double ctm_s_valLadezeit2;
@@ -65,6 +57,8 @@ variables
   int sigCounter = 1;
   int sigCounter_1 = 1;
   int sigCounter_2 = 1;
+  int i = 0;
+  int n = 0;
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -78,13 +72,22 @@ Signalabfrage(){
     bmsMaxLadeleistung = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladeleistung);
     bmsSpannung = getSignal(E3V_EVCANFD::BMS_20::BMS_Spannung);
     bmsStrom = getSignal(E3V_EVCANFD::BMS_20::BMS_Strom);
-    
     cms_s_ICpMaxStromA = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CMS_s_ICpMaxStromA);
-    
+    sysGetVariableFloatArray(sysvar::CCP::A2l_Merge_A286::CTM_s_IHvBatVektor, ctm_s_iHVBatVektor, elcount(ctm_s_iHVBatVektor));
     bmsTemperatur = getSignal(E3V_EVCANFD::BMS_25::BMS_Temperatur);
-    
+    sysGetVariableFloatArray(sysvar::CCP::A2l_Merge_A286::CTM_s_ILadDeltaVektor, ctm_s_iLadDeltaVektor, elcount(ctm_s_iLadDeltaVektor));
     lvb_restladezeit = getSignal(E3V_EVCANFD::HVLM_13::LVB_Restladezeit);
-    
+    ctm_s_valLadezeit1 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit1);
+    ctm_s_valLadezeit2 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit2);
+    ctm_s_valLadezeit3 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit3);
+    ctm_s_valLadezeit4 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit4);
+    ctm_s_valLadezeit5 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit5);
+    ctm_s_valLadezeit6 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit6);
+    ctm_s_valLadezeit7 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit7);
+    ctm_s_valLadezeit8 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit8);
+    ctm_s_valLadezeit9 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit9);
+    ctm_s_valLadezeit10 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_A286::CTM_s_valLadezeit10);
+  
     ladeSzenario = getSignal(E3V_EVCANFD::HVLM_14::HVLM_Ladeszenario);
 }
 
@@ -96,13 +99,38 @@ Signalausgabe(){
     write("BMS_MaxLadeleistung :;%f; Watt",bmsMaxLadeleistung);
     write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
     write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
-    
+    //MaxLadeleistung == Formel ( =MIN(C10;C11/C12) )
     write("CMS_s_ICpMaxStromA: ;%.1f; Ampere",cms_s_ICpMaxStromA);
-    
-    
+    write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",n ,ctm_s_iHVBatVektor[10-n]);   //CTM_s_iHVBatVektor (Für den SOC und zum SOC Zeitpunkt)
+    n++;
+    for(i=0; i<=10 ; i++){
+      write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",i ,ctm_s_iHVBatVektor[i]);
+    }
+    i = 0;
+    // Batteriekennlinie == Formel (CTM_s_iHVBatVektor(Für den SOC und zum SOC Zeitpunkt) - MaxLadestrom)
     write("BMS_Temperatur: ;%.1f; °C",bmsTemperatur);
-    
+    //Delta Temperatur(zum vorherigen Temperaturwert) == Formel ( BMS_Temperatur - BMS_Temperatur(zuvor))
+    for(i=0; i<=10 ; i++){
+      write("Der %d. CTM_s_iLadDeltaVektor: ;%.1f; Ampere",i ,ctm_s_iLadDeltaVektor[i]);
+    }
+    i = 0;
+    //CTM_s_valLadezeit[i]
+    //CTM_s_valLadezeitTemp[i]
+    //Delta Ladezeit (Ladezeit-LadezeitTemp) == Formel (CTM_s_valLadezeit[i] - CTM_s_valLadezeitTemp[i])
+    //CTM_s_tErsteLadezeit (Erste berechnete Ladezeit) (eine Zeile über alle Spalten)
     write("LVB_Restladdezeit: [m] ;%.1f; min",lvb_restladezeit);
+    write("CTM_s_valLadezeit1: [m] ;%.1f; min",ctm_s_valLadezeit1);
+    write("CTM_s_valLadezeit2: [m] ;%.1f; min",ctm_s_valLadezeit2);
+    write("CTM_s_valLadezeit3: [m] ;%.1f; min",ctm_s_valLadezeit3);
+    write("CTM_s_valLadezeit4: [m] ;%.1f; min",ctm_s_valLadezeit4);
+    write("CTM_s_valLadezeit5: [m] ;%.1f; min",ctm_s_valLadezeit5);
+    write("CTM_s_valLadezeit6: [m] ;%.1f; min",ctm_s_valLadezeit6);
+    write("CTM_s_valLadezeit7: [m] ;%.1f; min",ctm_s_valLadezeit7);
+    write("CTM_s_valLadezeit8: [m] ;%.1f; min",ctm_s_valLadezeit8);
+    write("CTM_s_valLadezeit9: [m] ;%.1f; min",ctm_s_valLadezeit9);
+    write("CTM_s_valLadezeit10: [m] ;%.1f; min",ctm_s_valLadezeit10);
+    //tatsächliche Ladezeit bis Ladeende (min) == Formel ( =RUNDEN(((Relative Messungszeit [s] i=10 - Relative Messungszeit [s] i=1 )/60);0) )
+    
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -116,7 +144,7 @@ on start
   //Signalabfrage();
   
   //write("/************Werte bei Messstart*****************/");
-  Signalausgabe();
+  //Signalausgabe();
   //write("/************************************************/");
 }
 
@@ -152,6 +180,7 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 4 ***********************/");
     write("/************BMS Ladezustand = 40 %%**************/");
+    write("Bezeichnung ;E; 40 %%");
     Signalausgabe();
     write("/************************************************/");
     sigCounter++;
@@ -162,6 +191,7 @@ on message E3V_EVCANFD::BMS_22
   {
     write("/******************* i = 5 ***********************/");
     write("/************BMS Ladezustand = 50 %%**************/");
+    write("Bezeichnung ;F; 50 %%");
     Signalausgabe();
     write("/************************************************/");
     sigCounter++;
@@ -241,6 +271,7 @@ on message E3V_ACANFD::Motor_52
     write("/************************************************/");
     write("Analyse beendet --> Wichtig: Datei unter RLZ.csv speichern!");
     sigCounter_1++;
+    n = 0;
   }
   
   output(this);
