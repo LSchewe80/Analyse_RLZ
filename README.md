@@ -1,6 +1,6 @@
 # Automation Analyse von Restladezeit-Messung
 
-Werte werden aus .MF4 / BLF ausgelesen
+Werte/Messergebnisse werden aus .MF4 / BLF ausgelesen und In die Vorlage eingefügt
 
 
 ## Aktuelle Übersicht der .py - Dateien
@@ -10,6 +10,11 @@ Werte werden aus .MF4 / BLF ausgelesen
 - sRam.py
 - th_1.py
 
+## Aktuelle Übersicht der .cfg/.can/.cbf - Dateien
+
+- Analyse_RLZ_14.cfg
+- Botschaftsanalyse.can
+- Botschaftsanalyse.cbf
 
 [Link](https://www.akka-technologies.com/?lang=de)
 
