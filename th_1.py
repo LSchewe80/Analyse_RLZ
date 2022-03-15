@@ -155,6 +155,14 @@ def func_th_1_thread(list,string):
                         #print(data_Zwischerspeicher.data_csv[i])
                         sheet.cell(row=zeile_xlmx, column=spalte_xlmx).value = data_Zwischerspeicher.data_csv[i]
                         zeile_xlmx += 1
+                        if zeile_xlmx == 14:
+                            zeile_xlmx = 16
+                        if zeile_xlmx == 29:
+                            zeile_xlmx = 30
+                        if zeile_xlmx == 31:
+                            zeile_xlmx = 32
+                        if zeile_xlmx == 43:
+                            zeile_xlmx = 47
                     zeile_csv += 1
 
 
