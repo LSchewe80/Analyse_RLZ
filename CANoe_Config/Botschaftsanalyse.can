@@ -92,43 +92,43 @@ Signalabfrage(){
 }
 
 Signalausgabe(){
-    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);
-    write("BMS Ladezustand = ;%.1f; %%",bmsLadeZustand);
-    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);
-    write("BMS_MaxLadestrom :;%.2f; Ampere ",bmsMaxLadeStrom);
-    write("BMS_MaxLadeleistung :;%f; Watt",bmsMaxLadeleistung);
-    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);
-    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);
-    //MaxLadeleistung == Formel ( =MIN(C10;C11/C12) )
-    write("CMS_s_ICpMaxStromA: ;%.1f; Ampere",cms_s_ICpMaxStromA);
-    write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",n ,ctm_s_iHVBatVektor[10-n]);   //CTM_s_iHVBatVektor (Für den SOC und zum SOC Zeitpunkt)
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);    //Zeile = 7
+    write("BMS Ladezustand = ;%.1f; %%",bmsLadeZustand);        //Zeile = 8
+    write("Ladezustand_02 : ;%.2f; %%",ladeZustand02);          //Zeile = 9
+    write("BMS_MaxLadestrom :;%.2f; Ampere ",bmsMaxLadeStrom);  //Zeile = 10
+    write("BMS_MaxLadeleistung :;%f; Watt",bmsMaxLadeleistung); //Zeile = 11
+    write("BMS_Spannung : ;%.3f; Volt",bmsSpannung);            //Zeile = 12
+    write("BMS_Strom : ;%.3f; Ampere",bmsStrom);                //Zeile = 13
+    //MaxLadeleistung == Formel ( =MIN(C10;C11/C12) )           //Zeile = 14
+    write("CMS_s_ICpMaxStromA: ;%.1f; Ampere",cms_s_ICpMaxStromA);  //Zeile =16
+    write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",n ,ctm_s_iHVBatVektor[10-n]);   //CTM_s_iHVBatVektor (Für den SOC und zum SOC Zeitpunkt) //Zeile = 17
     n++;
     for(i=0; i<=10 ; i++){
-      write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",i ,ctm_s_iHVBatVektor[i]);
+      write("Der %d. CTM_s_iHVBatVektor: ;%.1f; Ampere",i ,ctm_s_iHVBatVektor[i]);  //Zeile = 18 bis 28
     }
     i = 0;
-    // Batteriekennlinie == Formel (CTM_s_iHVBatVektor(Für den SOC und zum SOC Zeitpunkt) - MaxLadestrom)
-    write("BMS_Temperatur: ;%.1f; °C",bmsTemperatur);
-    //Delta Temperatur(zum vorherigen Temperaturwert) == Formel ( BMS_Temperatur - BMS_Temperatur(zuvor))
+    // Batteriekennlinie == Formel (CTM_s_iHVBatVektor(Für den SOC und zum SOC Zeitpunkt) - MaxLadestrom) //Zeile = 29
+    write("BMS_Temperatur: ;%.1f; °C",bmsTemperatur); //Zeile = 30
+    //Delta Temperatur(zum vorherigen Temperaturwert) == Formel ( BMS_Temperatur - BMS_Temperatur(zuvor)) //Zeile = 31
     for(i=0; i<=10 ; i++){
-      write("Der %d. CTM_s_iLadDeltaVektor: ;%.1f; Ampere",i ,ctm_s_iLadDeltaVektor[i]);
+      write("Der %d. CTM_s_iLadDeltaVektor: ;%.1f; Ampere",i ,ctm_s_iLadDeltaVektor[i]);  //Zeile = 32 bis 42
     }
     i = 0;
     //CTM_s_valLadezeit[i]
     //CTM_s_valLadezeitTemp[i]
     //Delta Ladezeit (Ladezeit-LadezeitTemp) == Formel (CTM_s_valLadezeit[i] - CTM_s_valLadezeitTemp[i])
     //CTM_s_tErsteLadezeit (Erste berechnete Ladezeit) (eine Zeile über alle Spalten)
-    write("LVB_Restladdezeit: [m] ;%.1f; min",lvb_restladezeit);
-    write("CTM_s_valLadezeit1: [m] ;%.1f; min",ctm_s_valLadezeit1);
-    write("CTM_s_valLadezeit2: [m] ;%.1f; min",ctm_s_valLadezeit2);
-    write("CTM_s_valLadezeit3: [m] ;%.1f; min",ctm_s_valLadezeit3);
-    write("CTM_s_valLadezeit4: [m] ;%.1f; min",ctm_s_valLadezeit4);
-    write("CTM_s_valLadezeit5: [m] ;%.1f; min",ctm_s_valLadezeit5);
-    write("CTM_s_valLadezeit6: [m] ;%.1f; min",ctm_s_valLadezeit6);
-    write("CTM_s_valLadezeit7: [m] ;%.1f; min",ctm_s_valLadezeit7);
-    write("CTM_s_valLadezeit8: [m] ;%.1f; min",ctm_s_valLadezeit8);
-    write("CTM_s_valLadezeit9: [m] ;%.1f; min",ctm_s_valLadezeit9);
-    write("CTM_s_valLadezeit10: [m] ;%.1f; min",ctm_s_valLadezeit10);
+    write("LVB_Restladdezeit: [m] ;%.1f; min",lvb_restladezeit);    //Zeile = 47
+    write("CTM_s_valLadezeit1: [m] ;%.1f; min",ctm_s_valLadezeit1); //Zeile = 48
+    write("CTM_s_valLadezeit2: [m] ;%.1f; min",ctm_s_valLadezeit2); //Zeile = 49
+    write("CTM_s_valLadezeit3: [m] ;%.1f; min",ctm_s_valLadezeit3); //Zeile = 50
+    write("CTM_s_valLadezeit4: [m] ;%.1f; min",ctm_s_valLadezeit4); //Zeile = 51
+    write("CTM_s_valLadezeit5: [m] ;%.1f; min",ctm_s_valLadezeit5); //Zeile = 52
+    write("CTM_s_valLadezeit6: [m] ;%.1f; min",ctm_s_valLadezeit6); //Zeile = 53
+    write("CTM_s_valLadezeit7: [m] ;%.1f; min",ctm_s_valLadezeit7); //Zeile = 54
+    write("CTM_s_valLadezeit8: [m] ;%.1f; min",ctm_s_valLadezeit8); //Zeile = 55
+    write("CTM_s_valLadezeit9: [m] ;%.1f; min",ctm_s_valLadezeit9); //Zeile = 56
+    write("CTM_s_valLadezeit10: [m] ;%.1f; min",ctm_s_valLadezeit10); //Zeile = 57
     //tatsächliche Ladezeit bis Ladeende (min) == Formel ( =RUNDEN(((Relative Messungszeit [s] i=10 - Relative Messungszeit [s] i=1 )/60);0) )
     
 }
