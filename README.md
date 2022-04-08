@@ -1,7 +1,6 @@
 # Automation Analyse von Restladezeit-Messung
 
-Werte/Messergebnisse werden aus .MF4 / BLF ausgelesen und In die Vorlage eingefügt
-
+Werte/Messergebnisse werden aus .MF4 / BLF rausanalysiert, in einer CSV-Datei abgespeichert und in die Vorlage (Excel-Datei) mit Hilfe des Python-Programms eingefügt.
 
 ## Aktuelle Übersicht der .py - Dateien
 
@@ -11,12 +10,17 @@ Werte/Messergebnisse werden aus .MF4 / BLF ausgelesen und In die Vorlage eingef�
 - th_1.py
 
 ## Aktuelle Übersicht der .cfg/.can/.cbf - Dateien
-
-- Analyse_RLZ_14.cfg
+## CANoe-Lizenz 14 inkl. XCP/CCP
+- Analyse_RLZ.cfg
 - Botschaftsanalyse.can
 - Botschaftsanalyse.cbf
 
+
 [Link](https://www.akka-technologies.com/?lang=de)
+
+
+
+
 
 
 -----------------------------------------------
