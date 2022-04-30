@@ -9,9 +9,12 @@ Created on
 ###########################_Einbindung_import_#################################
 ###############################################################################
 import time
+import datetime
 # from can import Message
 # import can
 # from bitarray import bitarray
+import socket
+import platform
 import os
 import subprocess
 import threading
@@ -58,7 +61,7 @@ def func_th_1_thread(list,string):
                     data_Zwischerspeicher.funcClear()
                     for row in csv_reader_object:
                         #print(len(row))
-                        print(row)   ##Inhalt CSV --##Zu Ansicht einkommentieren
+                        #print(row)   ##Inhalt CSV --##Zu Ansicht einkommentieren
                         if len(row) > 1 and row[1] != "":
                             data_Zwischerspeicher.funcSpeicher(row[1])  #Zeile Inhalt 2.Spalte
                             row_csv += 1
@@ -85,10 +88,19 @@ def func_th_1_thread(list,string):
             print("Thread_1 Analysedaten_xlsx verarbeiten, in Tabelle einfuegen und speichern!" + '-' * 60)
             try:
                 print("Excel-Datei oeffnen" + '-' * 60)
-                file = 'Rolling_Analyse_RLZ.xlsx'
+                file = 'Vorlagen\Rolling_Analyse_RLZ.xlsx'
                 fileXLSX = openpyxl.load_workbook(file)
                 sheet = fileXLSX["Auswertung"]
                 #print(sheet['C4'].value)
+
+                #Rechner/User-Name
+                name = os.getlogin()
+                sheet.cell(row=67, column=2).value = name
+                rechnername = socket.gethostname()
+                sheet.cell(row=67, column=3).value = rechnername
+                #Datum der Auswertung
+                date = datetime.datetime.now()
+                sheet.cell(row=68, column=2).value = date
 
                 print("Excel-Datei befuellen" + '-' * 60)
                 zeile_xlmx = 7
@@ -150,9 +162,9 @@ def func_th_1_thread(list,string):
                         #print("K " + '-' * 60)
                     
                     if zeile_csv > 0:
-                        #print(data_Zwischerspeicher.data_csv[i])
-                        data_Zwischerspeicher.data_csv[i]=data_Zwischerspeicher.data_csv[i].replace(".", ",")
-                        #print(data_Zwischerspeicher.data_csv[i])
+                        #print(type(data_Zwischerspeicher.data_csv[i]))
+                        data_Zwischerspeicher.data_csv[i]=float(data_Zwischerspeicher.data_csv[i])#.replace(".", ",")
+                        #print(type(data_Zwischerspeicher.data_csv[i]))
                         sheet.cell(row=zeile_xlmx, column=spalte_xlmx).value = data_Zwischerspeicher.data_csv[i]
                         zeile_xlmx += 1
                         if zeile_xlmx == 14:
