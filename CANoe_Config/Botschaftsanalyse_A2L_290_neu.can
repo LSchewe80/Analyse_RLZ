@@ -1,0 +1,376 @@
+/*@!Encoding:1252*/
+/*
+  Ersteller: Lars Schewe
+  Datum: 26.04.2022
+  
+  aktualisiert: 02.05.2022
+
+*/
+includes
+{
+  
+}
+
+variables
+{ 
+  //Hilfsvariablen Timer
+  float relTime_start;
+  float relTime;
+  
+  //Signalvariable für E3V_EVCANFD::BMS_22
+  float bmsLadeZustand;
+  float bmsMaxLadeStrom;
+  float bmsMaxLadeleistung;
+  float bmsSpannung;
+  float bmsStrom;
+  
+  //Signalvariable für E3V_EVCANFD::BMS_25
+  float bmsTemperatur;
+  
+  //Signalvariable für MSG E3V_ACANFD::Motor_52
+  float ladeZustand02;
+  
+  //Signalvariable für E3V_EVCANFD::HVLM_13
+  float lvb_restladezeit;
+  
+  //Signalvariable für E3V_EVCANFD::HVLM_14
+  float ladeSzenario;
+  
+  //interne Signale
+  double cms_s_ICpMaxStromA;
+  
+  double ctm_s_iHVBatVektor[11]; // array size should match the size of the system variable
+  double ctm_s_iLadDeltaVektor[11];
+  
+  double ctm_s_TVorhergesagtMessVek1;
+  double ctm_s_TVorhergesagtMessVek2;
+  double ctm_s_TVorhergesagtMessVek3;
+  double ctm_s_TVorhergesagtMessVek4;
+  double ctm_s_TVorhergesagtMessVek5;
+  double ctm_s_TVorhergesagtMessVek6;
+  double ctm_s_TVorhergesagtMessVek7;
+  double ctm_s_TVorhergesagtMessVek8;
+  double ctm_s_TVorhergesagtMessVek9;
+  double ctm_s_TVorhergesagtMessVek10;
+  
+  double ctm_s_tErsteLadezeit;
+  double ctm_s_valStatusRestladezeit;
+  
+  double ctm_s_valLadezeit1;
+  double ctm_s_valLadezeit2;
+  double ctm_s_valLadezeit3;
+  double ctm_s_valLadezeit4;
+  double ctm_s_valLadezeit5;
+  double ctm_s_valLadezeit6;
+  double ctm_s_valLadezeit7;
+  double ctm_s_valLadezeit8;
+  double ctm_s_valLadezeit9;
+  double ctm_s_valLadezeit10;
+  
+  //Hilfsvariable
+  int sigCounter = 0;
+  int sigCounter_1 = 2;
+  int sigCounter_2 = 1;
+  int sigCounter_sysVar = 0;
+  int i = 0;
+  int n = 0;
+}
+
+//-----------------------------------------------------------------------------------------------
+Signalabfrage(){
+    //Relative Messungszeit [s]
+    relTime = timeNowInt64()/1000000000.0;
+  
+    bmsLadeZustand = getSignal(E3V_EVCANFD::BMS_22::BMS_Ladezustand);
+    ladeZustand02 = getSignal(E3V_ACANFD::Motor_52::Ladezustand_02);
+    bmsMaxLadeStrom = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladestrom);
+    bmsMaxLadeleistung = getSignal(E3V_EVCANFD::BMS_21::BMS_Max_Ladeleistung);
+    bmsSpannung = getSignal(E3V_EVCANFD::BMS_20::BMS_Spannung);
+    bmsStrom = getSignal(E3V_EVCANFD::BMS_20::BMS_Strom);
+    cms_s_ICpMaxStromA = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CMS_s_ICpMaxStromA);
+    sysGetVariableFloatArray(sysvar::CCP::A2l_Merge_0290::CTM_s_IHvBatVektor, ctm_s_iHVBatVektor, elcount(ctm_s_iHVBatVektor));
+    bmsTemperatur = getSignal(E3V_EVCANFD::BMS_25::BMS_Temperatur);
+    sysGetVariableFloatArray(sysvar::CCP::A2l_Merge_0290::CTM_s_ILadDeltaVektor, ctm_s_iLadDeltaVektor, elcount(ctm_s_iLadDeltaVektor));
+    ctm_s_TVorhergesagtMessVek1 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek1);
+    ctm_s_TVorhergesagtMessVek2 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek2);
+    ctm_s_TVorhergesagtMessVek3 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek3);
+    ctm_s_TVorhergesagtMessVek4 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek4);
+    ctm_s_TVorhergesagtMessVek5 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek5);
+    ctm_s_TVorhergesagtMessVek6 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek6);
+    ctm_s_TVorhergesagtMessVek7 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek7);
+    ctm_s_TVorhergesagtMessVek8 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek8);
+    ctm_s_TVorhergesagtMessVek9 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek9);
+    ctm_s_TVorhergesagtMessVek10 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_TVorhergesagtMessVek10);
+    lvb_restladezeit = getSignal(E3V_EVCANFD::HVLM_13::LVB_Restladezeit);
+    ctm_s_valLadezeit1 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit1);
+    ctm_s_valLadezeit2 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit2);
+    ctm_s_valLadezeit3 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit3);
+    ctm_s_valLadezeit4 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit4);
+    ctm_s_valLadezeit5 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit5);
+    ctm_s_valLadezeit6 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit6);
+    ctm_s_valLadezeit7 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit7);
+    ctm_s_valLadezeit8 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit8);
+    ctm_s_valLadezeit9 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit9);
+    ctm_s_valLadezeit10 = sysGetVariableFloat(sysvar::CCP::A2l_Merge_0290::CTM_s_valLadezeit10);
+  
+    ladeSzenario = getSignal(E3V_EVCANFD::HVLM_14::HVLM_Ladeszenario);
+}
+
+Signalausgabe(){
+    write("Relative Messungszeit [s] : ;%.3f; sec",relTime);    //Zeile = 7
+    write("BMS Ladezustand = ;%.1f; %%",bmsLadeZustand);        //Zeile = 8
+    write("Ladezustand_02 : [%%];%.2f; %%",ladeZustand02);          //Zeile = 9
+    write("BMS_MaxLadestrom : [A] ;%.2f; Ampere ",bmsMaxLadeStrom);  //Zeile = 10
+    write("BMS_MaxLadeleistung [W]:;%f; Watt",bmsMaxLadeleistung); //Zeile = 11
+    write("BMS_Spannung : [V] ;%.3f; Volt",bmsSpannung);            //Zeile = 12
+    write("BMS_Strom : [A] ;%.3f; Ampere",bmsStrom);                //Zeile = 13
+    //MaxLadeleistung == Formel ( =MIN(C10;C11/C12) )           //Zeile = 14
+    write("CMS_s_ICpMaxStromA: [A] ;%.1f; Ampere",cms_s_ICpMaxStromA);  //Zeile =16
+    write("Der %d. CTM_s_iHVBatVektor: [A] ;%.1f; Ampere",n ,ctm_s_iHVBatVektor[10-n]);   //CTM_s_iHVBatVektor (Für den SOC und zum SOC Zeitpunkt) //Zeile = 17
+    n++;
+    for(i=0; i<=10 ; i++){
+      write("Der %d. CTM_s_iHVBatVektor: [A] ;%.1f; Ampere",i ,ctm_s_iHVBatVektor[i]);  //Zeile = 18 bis 28
+    }
+    i = 0;
+    // Batteriekennlinie == Formel (CTM_s_iHVBatVektor(Für den SOC und zum SOC Zeitpunkt) - MaxLadestrom) //Zeile = 29
+    write("BMS_Temperatur: ;%.1f; °C",bmsTemperatur); //Zeile = 30
+    //Delta Temperatur(zum vorherigen Temperaturwert) == Formel ( BMS_Temperatur - BMS_Temperatur(zuvor)) //Zeile = 31
+    for(i=0; i<=10 ; i++){
+      write("Der %d. CTM_s_iLadDeltaVektor: [A];%.1f; Ampere",i ,ctm_s_iLadDeltaVektor[i]);  //Zeile = 32 bis 42
+    }
+    i = 0;
+    
+    //CTM_s_valLadezeit[i] --> (von Zeile 56 - 66) per f(x) in Excel // Zeile = 43
+    
+    write("CTM_s_TVorhergesagtMessVek1: [degC] ;%.1f; °C ",ctm_s_TVorhergesagtMessVek1); //Zeile = 44
+    write("CTM_s_TVorhergesagtMessVek2: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek2);  //Zeile = 45
+    write("CTM_s_TVorhergesagtMessVek3: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek3);  //Zeile = 46
+    write("CTM_s_TVorhergesagtMessVek4: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek4);  //Zeile = 47
+    write("CTM_s_TVorhergesagtMessVek5: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek5);  //Zeile = 48
+    write("CTM_s_TVorhergesagtMessVek6: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek6);  //Zeile = 49
+    write("CTM_s_TVorhergesagtMessVek7: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek7);  //Zeile = 50
+    write("CTM_s_TVorhergesagtMessVek8: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek8);  //Zeile = 51
+    write("CTM_s_TVorhergesagtMessVek9: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek9);  //Zeile = 52
+    write("CTM_s_TVorhergesagtMessVek10: [degC] ;%.1f; °C",ctm_s_TVorhergesagtMessVek10); //Zeile = 53
+    
+    //CTM_s_valLadezeitTemp[i] Folge nach Segment // Zeile = 54
+    
+    //Delta Ladezeit (Ladezeit-LadezeitTemp) == Formel (CTM_s_valLadezeit[i] - CTM_s_valLadezeitTemp[i])  //Zeile = 55
+    
+    //CTM_s_tErsteLadezeit (Erste berechnete Ladezeit) (eine Zeile über alle Spalten) //Zeile = 56
+    
+    write("LVB_Restladdezeit: [min] ;%.1f; min",lvb_restladezeit);    //Zeile = 57
+    write("CTM_s_valLadezeit1: [min] ;%.1f; min",ctm_s_valLadezeit1); //Zeile = 58
+    write("CTM_s_valLadezeit2: [min] ;%.1f; min",ctm_s_valLadezeit2); //Zeile = 59
+    write("CTM_s_valLadezeit3: [min] ;%.1f; min",ctm_s_valLadezeit3); //Zeile = 60
+    write("CTM_s_valLadezeit4: [min] ;%.1f; min",ctm_s_valLadezeit4); //Zeile = 61
+    write("CTM_s_valLadezeit5: [min] ;%.1f; min",ctm_s_valLadezeit5); //Zeile = 62
+    write("CTM_s_valLadezeit6: [min] ;%.1f; min",ctm_s_valLadezeit6); //Zeile = 63
+    write("CTM_s_valLadezeit7: [min] ;%.1f; min",ctm_s_valLadezeit7); //Zeile = 64
+    write("CTM_s_valLadezeit8: [min] ;%.1f; min",ctm_s_valLadezeit8); //Zeile = 65
+    write("CTM_s_valLadezeit9: [min] ;%.1f; min",ctm_s_valLadezeit9); //Zeile = 66
+    write("CTM_s_valLadezeit10: [min] ;%.1f; min",ctm_s_valLadezeit10); //Zeile = 67
+    
+    //tatsächliche Ladezeit bis Ladeende (min) == Formel ( =RUNDEN(((Relative Messungszeit [s] i=10 - Relative Messungszeit [s] i=1 )/60);0) ) //Zeile = 68
+    
+}
+
+//-----------------------------------------------------------------------------------------------
+on start
+{
+  //Relative Messungszeit [s]
+  //relTime_start = timeNowInt64()/1000000000.0;
+  
+  msgBeep(5);
+  
+  //Signalabfrage();
+  
+  //write("/************Werte bei Messstart*****************/");
+  //Signalausgabe();
+  //write("/************************************************/");
+}
+
+on sysvar CCP::A2l_Merge_0290::CTM_s_valStatusRestladezeit
+{ 
+  ctm_s_tErsteLadezeit = sysGetVariableInt(sysvar::CCP::A2l_Merge_0290::CTM_s_tErsteLadezeit);
+  ctm_s_valStatusRestladezeit = sysGetVariableInt(sysvar::CCP::A2l_Merge_0290::CTM_s_valStatusRestladezeit);
+  
+  if( ctm_s_valStatusRestladezeit == 1 && sigCounter_sysVar == 0)
+  {
+    write("/************Erste berechnete Ladezeit*************/");
+    write("/******CTM_s_valstatusRestladezeit auf = 1*********/");
+    write("CTM_s_tErsteLadezeit: [min] %f min",ctm_s_tErsteLadezeit);
+    write("Wert bitte manuell in die Excell-Tabelle einfuegen!!!");
+    write("/**************************************************/");
+    sigCounter_sysVar++;
+  }
+}
+
+//-----------------------------------------------------------------------------------------------
+on message E3V_EVCANFD::BMS_22
+{ 
+  Signalabfrage();
+  
+  //Auswertung BMS_Ladezustand == 10%
+  if(bmsLadeZustand >= 10 && bmsLadeZustand <= 11 && sigCounter == 0)
+  {
+    write("/******************* i = 1 ***********************/");
+    write("/************BMS Ladezustand  = 10 %%*************/");
+    write("Bezeichnung ;B; 10 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 20%
+  if(bmsLadeZustand >= 20 && bmsLadeZustand <= 21 && sigCounter == 1)
+  {
+    write("/******************* i = 2 ***********************/");
+    write("/************BMS Ladezustand = 20 %%**************/");
+    write("Bezeichnung ;C; 20 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 30%
+  if(bmsLadeZustand >= 30 && bmsLadeZustand <= 31 && sigCounter == 2)
+  {
+    write("/******************* i = 3 ***********************/");
+    write("/************BMS Ladezustand = 30 %%**************/");
+    write("Bezeichnung ;D; 30 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 40%
+  if(bmsLadeZustand >= 40 && bmsLadeZustand <= 41 && sigCounter == 3)
+  {
+    write("/******************* i = 4 ***********************/");
+    write("/************BMS Ladezustand = 40 %%**************/");
+    write("Bezeichnung ;E; 40 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 50%
+  if(bmsLadeZustand >= 50 && bmsLadeZustand <= 51 && sigCounter == 4)
+  {
+    write("/******************* i = 5 ***********************/");
+    write("/************BMS Ladezustand = 50 %%**************/");
+    write("Bezeichnung ;F; 50 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  //Auswertung bei BMS_Ladezustand == 60%
+  if(bmsLadeZustand >= 60 && bmsLadeZustand <= 61 && sigCounter == 5)
+  {
+    write("/******************* i = 6 ***********************/");
+    write("/************BMS Ladezustand = 60 %%**************/");
+    write("Bezeichnung ;G; 60 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+  //Auswertung bei BMS_Ladezustand == 70%
+  if(bmsLadeZustand >= 70 && bmsLadeZustand <= 71 && sigCounter == 6)
+  {
+    write("/******************* i = 7 ***********************/");
+    write("/************BMS Ladezustand = 70 %%**************/");
+    write("Bezeichnung ;H; 70 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+  //Auswertung bei BMS_Ladezustand == 80%
+  if(bmsLadeZustand >= 80 && bmsLadeZustand <= 81 && sigCounter == 7)
+  {
+    write("/******************* i = 8 ***********************/");
+    write("/************BMS Ladezustand = 80 %%**************/");
+    write("Bezeichnung ;I; 80 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+
+  //Auswertung bei BMS_Ladezustand == 90%
+  if(bmsLadeZustand >= 90 && bmsLadeZustand <= 91 && sigCounter == 8)
+  {
+    write("/******************* i = 9 ***********************/");
+    write("/************BMS Ladezustand = 90 %%**************/");
+    write("Bezeichnung ;J; 90 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter++;
+  }
+  
+  
+  output(this);
+}
+
+//-----------------------------------------------------------------------------------------------
+on message E3V_ACANFD::Motor_52
+{ 
+  Signalabfrage();
+
+//  //Auswertung Ladezustand_02 == 10%
+//  if(ladeZustand02 >= 10 && ladeZustand02 <= 11 && sigCounter_1 == 1)
+//  {
+//    write("/******************* i = 1 ***********************/");
+//    write("/************Ladezustand_02  = 10 %%**************/");
+//    write("Bezeichnung ;B; 10 %%");
+//    Signalausgabe();
+//    write("/************************************************/");
+//    sigCounter_1++;
+//  }
+
+  //Auswertung Ladezustand_02 == 100%
+  if(ladeZustand02 >= 100 &&  ladeSzenario != 5 && sigCounter_1 == 2)
+  {
+    write("/******************* i = 10 **********************/");
+    write("/************BMS Ladezustand = 100 %%*************/");
+    write("Bezeichnung ;K; 100 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    write("Analyse beendet --> Wichtig: Datei unter RLZ.csv speichern!");
+    sigCounter_1++;
+    n = 0;
+  }
+  
+  output(this);
+}
+
+//-----------------------------------------------------------------------------------------------
+on message E3V_EVCANFD::HVLM_14
+{
+  //Signalauslesung für die Ermittlung --> Startpunkt: Direkt vor Ladebeginn
+  if(ladeSzenario != 5 && sigCounter_2 == 1)
+  { 
+      Signalabfrage();
+  }
+  
+  //Auswertung Wechsel HVLM_Ladeszenario in Sofortlade_aktiv
+  if(ladeSzenario == 5 && bmsLadeZustand <= 20 && sigCounter_2 == 1)  //ladeSzenario == Sofortladen_aktiv (5)
+  {
+    write("/******************* i = 0 ***********************/");
+    write("/******HVLM_Ladeszenario = Sofortladen_aktiv*******/");
+    write("Bezeichnung ;A; 0 %%");
+    Signalausgabe();
+    write("/************************************************/");
+    sigCounter_2++;
+  }
+  
+  output(this);
+}
+
+
+on message *
+{
+  output(this);
+}
