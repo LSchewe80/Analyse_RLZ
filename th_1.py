@@ -88,19 +88,19 @@ def func_th_1_thread(list,string):
             print("Thread_1 Analysedaten_xlsx verarbeiten, in Tabelle einfuegen und speichern!" + '-' * 60)
             try:
                 print("Excel-Datei oeffnen" + '-' * 60)
-                file = 'Vorlagen\Rolling_Analyse_RLZ.xlsx'
+                file = 'Vorlagen\Rolling_Analyse_RLZ_neu.xlsx'
                 fileXLSX = openpyxl.load_workbook(file)
-                sheet = fileXLSX["Auswertung"]
+                sheet = fileXLSX["Analyse RLZ 23° #1 EEH-"]
                 #print(sheet['C4'].value)
 
                 #Rechner/User-Name
                 name = os.getlogin()
-                sheet.cell(row=67, column=2).value = name
+                sheet.cell(row=77, column=2).value = name
                 rechnername = socket.gethostname()
-                sheet.cell(row=67, column=3).value = rechnername
+                sheet.cell(row=77, column=3).value = rechnername
                 #Datum der Auswertung
                 date = datetime.datetime.now()
-                sheet.cell(row=68, column=2).value = date
+                sheet.cell(row=78, column=2).value = date
 
                 print("Excel-Datei befuellen" + '-' * 60)
                 zeile_xlmx = 7
@@ -160,6 +160,7 @@ def func_th_1_thread(list,string):
                         zeile_xlmx = 7
                         zeile_csv = 0
                         #print("K " + '-' * 60)
+
                     
                     if zeile_csv > 0:
                         #print(type(data_Zwischerspeicher.data_csv[i]))
@@ -174,7 +175,9 @@ def func_th_1_thread(list,string):
                         if zeile_xlmx == 31:
                             zeile_xlmx = 32
                         if zeile_xlmx == 43:
-                            zeile_xlmx = 47
+                            zeile_xlmx = 44
+                        if zeile_xlmx == 54:
+                            zeile_xlmx = 57
                     zeile_csv += 1
 
 
